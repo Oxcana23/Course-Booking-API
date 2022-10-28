@@ -1,0 +1,63 @@
+{
+	"info": {
+		"_postman_id": "f5c654de-229b-4f57-91ad-2d7feaee14b7",
+		"name": "Course Booking API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23660034"
+	},
+	"item": [
+		{
+			"name": "Check Email - POST method",
+			"request": {
+				"method": "POST",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "User Registration - POST method",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"John\",\r\n\t\"lastName\": \"Smith\",\r\n\t\"email\": \"john@mail.com\",\r\n\t\"mobileNo\": \"09123456789\",\r\n\t\"password\": \"john1234\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/users/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"users",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user authentication - POST method",
+			"request": {
+				"method": "POST",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "get user detail - POST method",
+			"request": {
+				"method": "POST",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
