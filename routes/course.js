@@ -4,18 +4,32 @@ const Course = require("../models/Course.js");
 const courseController = require("../controllers/courseController.js");
 const auth = require ("../auth.js");
 
+/*Finished Part 3 Activity
 
-router.post("/create", (req, res) => {
+1. verify the token that should be provided in order to create a course.
 
-	courseController.addCourse(req.body).then(resultFromController =>{
+
+2. in the controller, create a logic inside the addCourse function which will check if the user that is logged in is admin or not. 
+- if user is admin, continue with the creation of the course 
+- else if the use is not admin, return false
+*/
+
+
+router.post("/create", auth.verify, (req, res) => {
+const data = {
+	course: req.body,
+	isAdmin: auth.decode(req.headers.authorization).isAdmin
+	}
+	courseController.addCourse(data).then(resultFromController => {
 		res.send(resultFromController)
 	})
-	
-	userController.registerUser(req.body).then(resultFromController => res.send(resultFromController));
-
 })
 
 
-
-
 module.exports = router
+
+
+
+
+
+
