@@ -34,7 +34,7 @@ router.post("/login", (req, res) => {
 
 
 
-// START OF S39 NA with SIR EARL
+// START OF S39 with SIR EARL
 // middleware = auth.verify
 // req.headers.authorization = is the token from postman
 router.post("/details", auth.verify, (req, res) => {
