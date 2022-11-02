@@ -34,7 +34,7 @@ app.use("/users", userRoutes);
 app.use("/courses", courseRoutes);
 
 
-app.listen(process.env.PORT || 4000, () =>{
+app.listen(process.env.PORT || 4000, () => {
 	console.log(`API is now online on port ${process.env.PORT || 4000}`)
 })
 

@@ -2,10 +2,12 @@
 // represents the course table in mongoDB
 
 
-const Course = require("../models/Course.js");
+const Course = require("../models/Course");
 
 
 module.exports.addCourse = (data) => {
+	console.log(data.isAdmin)
+
 	if(data.isAdmin) {
 		let newCourse = new Course ({
 			name: data.course.name,
@@ -15,17 +17,14 @@ module.exports.addCourse = (data) => {
 
 		return newCourse.save().then((newCourse, error) => {
 			if(error){
-				return false
+				return error
 			}
-			return true
+			return newCourse
 		})
 	}
 
-
 	// if the user is not admin, then return this message as a promise to avoid errors
-	let message = Promise.resolve({
-		message: "User must be ADMIN to access this."
-	})
+	let message = Promise.resolve("User must be ADMIN to access this.")
 	return message.then((value) =>{
 		return value
 	})
@@ -38,7 +37,6 @@ module.exports.getAllCourses = () => {
 		return result
 	})
 }
-
 
 
 module.exports.getActiveCourses = () => {
