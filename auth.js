@@ -1,73 +1,56 @@
-// GIT = npm install jsonwebtoken 
-// token- serves as a key to give us access to certain routes
-
-
 const jwt = require("jsonwebtoken");
-// for secret code
 const secret = "CourseBookingAPI";
 
-// to create a token using the jsonwebtoken package from NPM
+// To create a token using the jsonwebtoken package from NPM
 module.exports.createAccessToken = (user) => {
 	const data = {
 		id : user._id,
-		email : user.email,
+		email: user.email,
 		isAdmin: user.isAdmin
 	}
+
+
 	return jwt.sign(data, secret, {});
 };
-
 
 // To verify a token from the request/from postman
 module.exports.verify = (request, response, next) => {
 	let token = request.headers.authorization
-	/*store authorization from postman goes to request which is the let token*/
 
 	if(typeof token !== "undefined"){
 		console.log(token)
-		// is equal to request.headers.authorization
-		// actual value = Bearer <actual-token>
-
+		// Bearer <actual-token>
 		token = token.slice(7, token.length)
-		// actual value = <actual-token>
+		// <actual-token>
 
-
-		 //REturn statement, accepts 3 arguments 
-		 // to verify the token using jwt, it requires the actual token and the secret key that was used to create it
+		// To verify the token using jwt, it requires the actual token and the secret key that was used to create it
 		return jwt.verify(token, secret, (error, data) => {
 			if(error){
 				return response.send({
 					auth: "Failed."
 				})
-			}else{
+			} else {
 				next()
 			}
 		})
-	}else{
+	} else {
 		return null
 	}
-};
+}
 
-
-// function for decoding the token
-// to decode the user details from the token
+// To decode the user details from the token
 module.exports.decode = (token) => {
 	if(typeof token !== "undefined"){
 		token = token.slice(7, token.length)
 
 		return jwt.verify(token, secret, (error, data) => {
 			if(error){
-				return null
-			}else{
-
-				// responsible for decodeing the token from postman. complete true is the status . payload = gets the value from jwt.decode. it extracts the value from the function jwt.decode
+				return null 
+			} else {
 				return jwt.decode(token, {complete: true}).payload
 			}
 		})
-	}else{
+	} else {
 		return null
 	}
 }
-
-
-
-

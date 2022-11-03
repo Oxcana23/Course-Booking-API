@@ -1,40 +1,29 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-// connect 
-const userRoutes = require("./routes/user.js");
-const courseRoutes = require("./routes/course.js");
-
+const userRoutes = require("./routes/user.js")
+const courseRoutes = require("./routes/course.js")
 
 const app = express();
 
-
-// DB CONNECTION
+//DB Connection
 mongoose.connect("mongodb+srv://admin:admin123@zuitt.25fvemh.mongodb.net/Course-Booking-API?retryWrites=true&w=majority", {
 	useNewUrlParser: true,
 	useUnifiedTopology: true
 });
 
-
-// PROMPTS MESSAGE IN THE TERMINAL CONNECTION IS OPEN
+//Prompts message in the terminal once connecton is open
 mongoose.connection.once("open", () => console.log("Now connected to MongoDB Atlas"))
 
-
-// MIDDLEWARES
-// convert data into json format
-// application or modules turns to blue
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
-
-// default url
-// initializing the routes
+// Initializing the routes
 app.use("/users", userRoutes);
 app.use("/courses", courseRoutes);
 
 
 app.listen(process.env.PORT || 4000, () => {
-	console.log(`API is now online on port ${process.env.PORT || 4000}`)
+	console.log(`API is now online on port ${process.env.PORT || 4000}`);
 })
-

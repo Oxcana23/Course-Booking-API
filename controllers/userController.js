@@ -1,7 +1,8 @@
 const User = require("../models/User.js");
 const bcrypt = require("bcrypt");
 const auth = require("../auth.js");
- 
+const Course = require("../models/Course.js")
+
 module.exports.checkEmailExists = (reqBody) => {
 	return User.find({email : reqBody.email}).then(result => {
 		if(result.length > 0){
@@ -12,15 +13,16 @@ module.exports.checkEmailExists = (reqBody) => {
 	})
 }
 
-
 module.exports.registerUser = (reqBody) => {
 	let newUser = new User({
-		firstName: reqBody.firstName,
-		lastName: reqBody.lastName,
-		email: reqBody.email,
-		mobileNo: reqBody.mobileNo,
-		password: bcrypt.hashSync(reqBody.password, 10)
+		firstName : reqBody.firstName,
+		lastName : reqBody.lastName,
+		email : reqBody.email,
+		mobileNo : reqBody.mobileNo,
+		password : bcrypt.hashSync(reqBody.password, 10)
+		// 10 = salt
 	})
+
 	return newUser.save().then((user, error) => {
 		if(error){
 			return false;
@@ -29,7 +31,6 @@ module.exports.registerUser = (reqBody) => {
 		}
 	})
 }
-
 
 module.exports.loginUser = (reqBody) => {
 	return User.findOne({email : reqBody.email}).then(result => {
@@ -37,43 +38,60 @@ module.exports.loginUser = (reqBody) => {
 			return false;
 		}else{
 			const isPasswordCorrect = bcrypt.compareSync(reqBody.password, result.password);
+
 			if(isPasswordCorrect){
-				return {access: auth.createAccessToken(result)}
+				//Generate an access
+				return  {access : auth.createAccessToken(result)}
 			}
 		}
 	})
 }
 
-
-
-// S38 ACTIVITY - CODE ALONG
-// specific to find id
 module.exports.getProfile = (data) => {
 	return User.findById(data.userId).then(result => {
 		return result;
 	})
 }
 
+module.exports.enroll = async (data) => {
 
-// generate an access token
-/*
-THIS IS WITHOUT BCRYPT
-module.exports.registerUser = (reqBody) => {
-	let newUser = new User({
-		firstName: reqBody.firstName,
-		lastName: reqBody.lastName,
-		email: reqBody.email,
-		mobileNo: reqBody.mobileNo,
-		password: reqBody.password
+	//Adds the courseId in the user's enrollment array
+	let isUserUpdated = await User.findById(data.userId).then(user => {
+		user.enrollments.push({courseId : data.courseId});
+
+		return user.save().then((user, error) => {
+			if(error){
+				return false;
+			}else{
+				return true;
+			}
+		})
+
 	})
-	return newUser.save().then((user, error) => {
-		if(error){
-			return false;
-		}else{
-			return true;
-		}
+
+	let isCourseUpdated = await Course.findById(data.courseId).then(course => {
+		course.enrollees.push({userId : data.userId});
+
+		return course.save().then((course, error) => {
+			if(error){
+				return false
+			}else{
+				return true;
+			}
+		})
 	})
-	// saving of database bec we users info to register but with conditional statement. depends whether you want to return a string
+
+	if(isUserUpdated && isCourseUpdated){
+		//isUserUpdated = true
+		//isCourseUpdatted = true
+		//final output = TRUE
+		return true;
+	}else{
+		//If one of these: isUserUpdated or isCourseUpdated is false
+		//Output will be false
+
+		//If both isUserUpdated and isCourseUpdated
+		//Output will be a concrete FALSE
+		return false;
+	}
 }
-// result can be named as data
-// return can also be a message "The user ..."*/

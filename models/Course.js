@@ -1,11 +1,9 @@
 const mongoose = require("mongoose");
 
-
-// SCHEMA
 const courseSchema = new mongoose.Schema({
 	name: {
 		type: String,
-		required: [true, "Course Name is Required!"]
+		required : [true, "Course Name is Required!"]
 	},
 	description: {
 		type: String,
@@ -35,6 +33,4 @@ const courseSchema = new mongoose.Schema({
 	}]
 })
 
-
-// MODEL - serves as an authorizing agent to approve data export. Cap first letter. model and schema are always together. 
 module.exports = mongoose.model("Course", courseSchema);
